@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <title>Testing Autocomplete</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>  
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 <body>
     <form method="post">
@@ -27,10 +28,9 @@
                 dataType: 'jsonp',
                 type: 'GET',
                 success: function (data) {
-					console.log(data.parse);
+					          console.log(data.parse);
                     response($.map($.makeArray(data.parse), function (item) {
-						
-						
+
                         return {
                             //
                             label: item.title,
@@ -47,10 +47,10 @@
             $('#hdValue').val(ui.item.value);
             return false;
         },*/
-        minLength: 3
+        minLength: 1
     });
-	
-	
-    </script>  
+
+
+    </script>
 </body>
 </html>
