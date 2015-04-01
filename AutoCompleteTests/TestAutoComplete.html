@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Testing Autocomplete</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>  
+</head>
+<body>
+    <form method="post">
+        <!--autocomplete text box to hit API-->
+        <input type="text" name="txtAuto" id="txtAuto"/>
+
+        <!--hidden field to store id of selection, if applicable-->
+        <!-- <input type="hidden" name="hdValue" id="hdValue" /> -->
+        <input type="submit" value="Go" />
+    </form>
+
+    <script type="text/javascript">
+        var url = 'http://en.wikipedia.org/w/api.php?format=json&action=parse'
+    $('#txtAuto').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: url,
+                data: { page: request.term },
+                dataType: 'jsonp',
+                type: 'GET',
+                success: function (data) {
+					console.log(data.parse);
+                    response($.map($.makeArray(data.parse), function (item) {
+						
+						
+                        return {
+                            //
+                            label: item.title,
+                            //
+                            value: item.revid
+                        }
+                    }));
+					return data
+                }
+            })
+        },
+        /*select: function (event, ui) {
+            $('#txtAuto').val(ui.item.label);
+            $('#hdValue').val(ui.item.value);
+            return false;
+        },*/
+        minLength: 3
+    });
+	
+	
+    </script>  
+</body>
+</html>
