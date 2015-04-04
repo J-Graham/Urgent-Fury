@@ -3,9 +3,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Testing Autocomplete</title>
+    <title>Urgent Fury: Project ChkTen</title>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="dist/jquery-highlighttextarea/jquery.highlighttextarea.min.css">
 
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -20,14 +19,6 @@
 
     </script>
 
-    <!--<style>
-      /*#txtAuto {
-        z-index: 2;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        background: rgba(255, 255, 255, 0);
-      }*/
 
       /*#completebox {
         z-index: 1;
@@ -36,26 +27,20 @@
         top: 0px;
         color: rgba(0, 0, 0, 0.5);
       }*/
-    </style>*/-->
 
 </head>
 <body>
     <form method="post" onsubmit="doalert()">
         <!--autocomplete text box to hit API-->
-      <div id="box">
         <input type="text" name="txtAuto" id="txtAuto"/>
         <!--<input type="text" id="completebox"/>-->
-      </div>
-      <br />
         <!--hidden field to store id of selection, if applicable-->
         <input type="hidden" name="hdValue" id="hdValue" />
-        <input type="submit" value="Go" />
     </form>
 
     <script type="text/javascript">
 
         var url = 'http://ec2-75-101-214-153.compute-1.amazonaws.com:8983/solr/statedecoded/search'
-        var mockArray = [];
         for (var i = 0; i < 25; i++) {
           var item = {value: i, label: 'Choice' + i };
           mockArray.push(item);
