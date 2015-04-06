@@ -8,7 +8,7 @@
        <entity name="vwLogs"
          pk="LogID"
          query="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs"
-         deltaImportQuery="Sselect LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs where LogID='${dih.delta.id}'"
+         deltaImportQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs where LogID='${dih.delta.id}'"
          deltaQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs  WHERE DateCreated > '${dih.last_index_time}'"
          >
           <field column="LogID" name="LogID"/>

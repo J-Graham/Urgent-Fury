@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="search" version="1.5">
+  <field name="_version_" type="long" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="LogID" type="int" indexed="true" stored="true" />
+  <field name="ServerName" type="text_general" indexed="true" stored="true" />
+  <field name="RequestURIBase" type="text_general" indexed="true" stored="true" />
+  <field name="DateRequestEnd" type="date" indexed="true" stored="true" />
+</schema>
