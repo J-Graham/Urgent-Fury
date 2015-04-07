@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Urgent Fury: Project ChkTen</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+  <script>
+    //just reporting the selected value
+    function doalert() {
+      var useval = $("#hdValue").val();
+      alert(useval);
+      return false;
+    }
+  </script>
+
+  <style>
+    body {
+      background: #000000;
+    }
+
+    #txtAuto {
+      background: #000000;
+      color: #FF0066;
+      height: 1.7em;
+      width: 15em;
+      font-size: 1.2em;
+      border: 2px solid #00FF00;
+    }
+
+    #txtAuto::selection {
+      background: #ffb7b7;
+      /* WebKit/Blink Browsers */
+    }
+
+    #txtAuto::-moz-selection {
+      background: #ffb7b7;
+      /* Gecko Browsers */
+    }
+
+    #txtAuto:focus {
+      /*border: 2px solid #00FF00;*/
+      /*box-shadow: 1px 1px 2px #00FF00;*/
+
+      outline: none;
+    }
+
+    .mySubmit:focus {
+      outline: none;
+    }
+
+    .ui-autocomplete {
+      background: #000000;
+      color: #00FF00;
+    }
+
+    .ui-menu .ui-menu-item,
+    .ui-menu .ui-menu-item a {
+      background: #000000;
+      color: #00FF00;
+      /*border: none;
+        outline: none;*/
+    }
+
+    .mySubmit {
+      background: #000000;
+      color: #00FF00;
+      border: 2px solid #FF0066;
+    }
+    /*#completebox {
+        z-index: 1;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        color: rgba(0, 0, 0, 0.5);
+      }*/
+  </style>
+
+</head>
+
+<body>
+  <form method="post" onsubmit="doalert()">
+    <!--autocomplete text box to hit API-->
+
+    <input type="text" name="txtAuto" id="txtAuto" />
+    <!--<input type="text" id="completebox"/>-->
+
+    <!--hidden field to store id of selection, if applicable-->
+    <input type="hidden" name="hdValue" id="hdValue" />
+    <input type="submit" value="Go" class="mySubmit" />
+  </form>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+
+      var url = 'http://127.0.0.1:8985/solr/FancySearch/query'
+      var mockArray = [{
+        value: 0,
+        label: "Microsoft"
+      }, {
+        value: 1,
+        label: "Mountain Dew"
+      }, {
+        value: 2,
+        label: "Nancy Drew"
+      }, {
+        value: 3,
+        label: "Albequerque"
+      }, {
+        value: 4,
+        label: "Montana"
+      }, {
+        value: 5,
+        label: "Applejacks"
+      }, {
+        value: 6,
+        label: "Applicance"
+      }, {
+        value: 7,
+        label: "Playstation"
+      }, {
+        value: 8,
+        label: "Peasants"
+      }, {
+        value: 9,
+        label: "Ham"
+      }];
+      for (var i = 0; i < 25; i++) {
+        var item = {
+          value: i,
+          label: 'Choice' + i
+        };
+        mockArray.push(item);
+      }
+
+
+      $('#txtAuto').autocomplete({
+        source: function(request, response) {
+          $.ajax({
+            url: url,
+            data: 'q=RequestURIBase%3A*' + request.term + '*&wt=json&indent=true',
+            dataType: 'jsonp',
+            'jsonp': 'json.wrf',
+            type: 'GET',
+            success: function(data) {
+              var results = data.response.docs;
+              x = data;
+
+              console.log(data.parse);
+              response($.map(data.response.docs, function(item) {
+
+                return {
+                  //
+                  label: item.RequestURIBase,
+                  //
+                  value: item.LogID
+                }
+              }).slice(0, 10));
+              return data;
+            }
+          })
+        },
+
+        //slice to return first x items
+        // source: mockArray.slice(0, 10),
+
+        //response fires before items shown
+        //use this time to populate textboxwith suggestion
+        response: function(event, ui) {
+          PopulateInput(event, ui);
+        },
+
+        //autoFocus directs focus immediately to first item
+        autoFocus: false,
+
+        //length query term must reach before firing
+        minLength: 1,
+
+        //focus fires when you toggle through the suggestions
+        focus: function(event, ui) {
+
+          $('#txtAuto').val(ui.item.label);
+          $('#hdValue').val(ui.item.value);
+          return false;
+        },
+
+        //select fires when you pick a suggestion
+        select: function(event, ui) {
+          $('#txtAuto').val(ui.item.label);
+          $('#hdValue').val(ui.item.value);
+          return false;
+        }
+
+      });
+    });
+
+    //Custom function to populate textbox with first suggestion
+    //up until a mismatch occurs
+    function PopulateInput(event, ui) {
+      if (ui.content != null) {
+        if (ui.content[0] != null) {
+
+          //get first suggestion
+          var firstoption = ui.content[0].label;
+
+          //just logging first value
+          console.log(firstoption);
+
+          //get textbox input
+          var txt = $("#txtAuto");
+          //var comtxt = $("#completebox");
+
+          //find length of what was searched
+          var typedtext = txt.val();
+          var oldlength = typedtext.length;
+
+          //get length of first choice
+          var newlength = String(firstoption).length;
+
+          //get substrings
+          var ss = firstoption.substring(0, oldlength).toLowerCase();
+          var therest = firstoption.substring(oldlength, newlength);
+
+          //see if we still have a match
+          if (ss == txt.val().toLowerCase()) {
+
+            //populate the rest of the first suggestion into textbox
+            txt.val(typedtext + therest);
+
+            //highlight the suggested portion
+            txt[0].setSelectionRange(oldlength, newlength)
+
+            //populate the rest of the text into background box
+            //comtxt.val(typedtext + therest);
+          }
+          //  else {
+          //   comtxt.val("");
+          // }
+
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
