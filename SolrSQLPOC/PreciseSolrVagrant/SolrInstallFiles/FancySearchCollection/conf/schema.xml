@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <schema name="search" version="1.5">
-  <field name="_version_" type="long" indexed="true" stored="true" required="true" multiValued="false" />
-  <field name="LogID" type="int" indexed="true" stored="true" />
-  <field name="ServerName" type="text_general" indexed="true" stored="true" />
-  <field name="RequestURIBase" type="text_general" indexed="true" stored="true" />
-  <field name="DateRequestEnd" type="date" indexed="true" stored="true" />
+  <types>
+    <fieldtype name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true" />
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true" />
+    <fieldtype name="binary" class="solr.BinaryField" />
+
+    <!-- Numeric field types that manipulate the value into
+        a string value that isn't human-readable in its internal form,
+        but with a lexicographic ordering the same as the numeric ordering,
+        so that range queries work correctly. -->
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0" />
+    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0" />
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0" />
+    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" omitNorms="true" sortMissingLast="true" positionIncrementGap="0" />
+    <fieldType name="sint" class="solr.SortableIntField" sortMissingLast="true" omitNorms="true" />
+    <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true" />
+    <fieldType name="sfloat" class="solr.SortableFloatField" sortMissingLast="true" omitNorms="true" />
+    <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true" />
+
+    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" omitNorms="true" positionIncrementGap="0" />
+    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" omitNorms="true" positionIncrementGap="0" />
+    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" omitNorms="true" positionIncrementGap="0" />
+    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0" />
+
+    <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0" />
+    <!-- A Trie based date field for faster date range queries and date faceting. -->
+    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true" precisionStep="6" positionIncrementGap="0" />
+
+    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d" />
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate" />
+    <fieldtype name="geohash" class="solr.GeoHashField" />
+  </types>
+
+  <fields>
+    <field name="_version_" type="long" indexed="true" stored="true" />
+    <field name="LogID" type="string" indexed="true" stored="true" />
+    <field name="ServerName" type="string" indexed="true" stored="true" />
+    <field name="RequestURIBase" type="string" indexed="true" stored="true" />
+    <field name="DateRequestEnd" type="date" indexed="true" stored="true" />
+  </fields>
+  <uniqueKey>LogID</uniqueKey>
 </schema>

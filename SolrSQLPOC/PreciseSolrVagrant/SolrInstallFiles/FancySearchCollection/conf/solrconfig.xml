@@ -85,7 +85,7 @@
     <lib dir="../../../dist/" regex="solr-velocity-\d.*\.jar" />
     <!-- This is for the custom search provider -->
     <lib dir="../../../dist/" regex="solr-dataimporthandler-.*\.jar" />
-
+    <lib dir="../../../contrib/dataimporthandler/lib" regex=".*\.jar" />
     <!-- an exact 'path' can be used instead of a 'dir' to specify a
      specific jar file.  This will cause a serious error to be logged
      if it can't be loaded.
@@ -832,7 +832,7 @@
         <lst name="defaults">
             <str name="echoParams">explicit</str>
             <int name="rows">10</int>
-            <str name="df">text</str>
+            <str name="df">ServerName</str>
         </lst>
         <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -1463,32 +1463,6 @@
         </lst>
         <arr name="components">
             <str>terms</str>
-        </arr>
-    </requestHandler>
-
-
-    <!-- Query Elevation Component
-
-     http://wiki.apache.org/solr/QueryElevationComponent
-
-     a search component that enables you to configure the top
-     results for a given query regardless of the normal lucene
-     scoring.
-     -->
-    <searchComponent name="elevator" class="solr.QueryElevationComponent" >
-        <!-- pick a fieldType to analyze queries -->
-        <str name="queryFieldType">string</str>
-        <str name="config-file">elevate.xml</str>
-    </searchComponent>
-
-    <!-- A request handler for demonstrating the elevator component -->
-    <requestHandler name="/elevate" class="solr.SearchHandler" startup="lazy">
-        <lst name="defaults">
-            <str name="echoParams">explicit</str>
-            <str name="df">text</str>
-        </lst>
-        <arr name="last-components">
-            <str>elevator</str>
         </arr>
     </requestHandler>
 

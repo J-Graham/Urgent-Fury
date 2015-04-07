@@ -1,20 +1,11 @@
 <dataConfig>
-     <dataSource type="JdbcDataSource"
-                 driver="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                 url="jdbc:sqlserver://10.211.55.3;databaseName=IISSearch"
-                 user="sa_All"
-                 password="pass1234"/>
-     <document>
-       <entity name="vwLogs"
-         pk="LogID"
-         query="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs"
-         deltaImportQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs where LogID='${dih.delta.id}'"
-         deltaQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs  WHERE DateCreated > '${dih.last_index_time}'"
-         >
-          <field column="LogID" name="LogID"/>
-          <field column="ServerName" name="ServerName"/>
-           <field column="DateRequestEnd" name="DateRequestEnd"/>
-            <field column="RequestURIBase" name="RequestURIBase"/>
-       </entity>
-     </document>
-   </dataConfig>
+  <dataSource type="JdbcDataSource" driver="com.microsoft.sqlserver.jdbc.SQLServerDriver" url="jdbc:sqlserver://10.211.55.3;databaseName=IISSearch" user="sa_All" password="pass1234" />
+  <document>
+    <entity name="vwLogs" pk="LogID" query="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs" deltaImportQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs where LogID='${dih.delta.id}'" deltaQuery="select LogID, ServerName, DateRequestEnd, RequestURIBase from vwLogs  WHERE DateCreated > '${dih.last_index_time}'">
+      <field column="LogID" name="LogID" />
+      <field column="ServerName" name="ServerName" />
+      <field column="DateRequestEnd" name="DateRequestEnd" />
+      <field column="RequestURIBase" name="RequestURIBase" />
+    </entity>
+  </document>
+</dataConfig>
