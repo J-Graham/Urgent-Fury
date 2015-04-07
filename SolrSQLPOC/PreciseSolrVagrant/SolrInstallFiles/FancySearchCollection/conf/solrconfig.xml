@@ -85,7 +85,7 @@
     <lib dir="../../../dist/" regex="solr-velocity-\d.*\.jar" />
     <!-- This is for the custom search provider -->
     <lib dir="../../../dist/" regex="solr-dataimporthandler-.*\.jar" />
-    <lib dir="../../../contrib/dataimporthandler/lib" regex=".*\.jar" />
+    <lib dir="../../../contrib/dataimporthandler/lib/" regex=".*\.jar" />
     <!-- an exact 'path' can be used instead of a 'dir' to specify a
      specific jar file.  This will cause a serious error to be logged
      if it can't be loaded.
