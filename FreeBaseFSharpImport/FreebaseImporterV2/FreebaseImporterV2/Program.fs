@@ -15,7 +15,7 @@ let bookDB = dbSchema.GetDataContext()
         
 // take from Freebase
 let bookList = 
-    fb.``Arts and Entertainment``.Books.Books.Take(1)
+    fb.``Arts and Entertainment``.Books.Books.Take(5)
 
 // just a quick test
 //let printBookInfo = 
@@ -43,6 +43,7 @@ let main argv =
     with
         | exn -> System.Console.WriteLine(exn.ToString)
     
+    System.Console.WriteLine("Success!")
     System.Console.ReadKey() |> ignore
     0 // return an integer exit code
 
