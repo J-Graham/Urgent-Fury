@@ -19,7 +19,7 @@
   * Still a lot of work do be done, but a good start.
   
 ## TODO:
-  1. Bacthing
+  1. Batching
   1. All data -  having an issue with Genre so far
   1. Proper relational data
   1. Resilient error handling
