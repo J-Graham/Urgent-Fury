@@ -1,0 +1,7 @@
+version: 1.0
+os: windows
+files:
+  - source: .\AutoCompleteTests
+    destination: c:\Webapps\AutoCompleteTests
+permissions:
+hooks:
