@@ -1,5 +1,5 @@
 version: 0.0
 os: windows
 files:
-  - source: .\AutoCompleteTests
+  - source: \AutoCompleteTests
     destination: c:\Webapps\AutoCompleteTests
