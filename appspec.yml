@@ -3,5 +3,3 @@ os: windows
 files:
   - source: .\AutoCompleteTests
     destination: c:\Webapps\AutoCompleteTests
-permissions:
-hooks:
