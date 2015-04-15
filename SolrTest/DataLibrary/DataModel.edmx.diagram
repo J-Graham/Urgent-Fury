@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b4be44e7258446d6b44d955480d62736" Name="Diagram1" ZoomLevel="74" DisplayType="true">
+        <EntityTypeShape EntityType="DataModel.Log" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="DataModel.Server" Width="1.5" PointX="0.75" PointY="2.375" />
+        <EntityTypeShape EntityType="DataModel.Site" Width="1.5" PointX="3" PointY="2.25" />
+        <AssociationConnector Association="DataModel.FK_Logs_Sites" />
+        <AssociationConnector Association="DataModel.FK_Sites_Servers" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
