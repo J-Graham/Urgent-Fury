@@ -5,45 +5,76 @@ open Microsoft.FSharp.Data.TypeProviders
 open System.Linq
 open System.Data.Linq
 
+//--------------------------------------------------------------------------------------
+// NOTE: commented out code at the end was for the old method using SqlDataConnection TypeProvider. 
+// This works, but there is no bulk insert and can't use user-defined table type in stored procedure
+
+
 // Freebase Provider -> this way allows you to use an api key, which we'll probably need for running a lot of queries
 type fbprov = FreebaseDataProvider<("API KEY HERE")>
 let fb = fbprov.GetDataContext()
 
-// our Book db -> change the connection string accordingly
-type dbSchema = SqlDataConnection<"Data Source=ALEX-1525\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;">
-let bookDB = dbSchema.GetDataContext()
-        
-// take from Freebase
+
+// SQL Programmaility Provider
+type sqlprog = SqlProgrammabilityProvider<"Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;">
+type bookTable = sqlprog.dbo.``User-Defined Table Types``.tt_BookNames
+type bulkInsert = sqlprog.dbo.Books_BulkInsert
+
+let bulker = new bulkInsert("Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;")
+// note: would love to remove the redundant connection string, but when I tried to set a value it threw an error saying that 
+// the connection string had to be static. Needs work.
+
+
+// Get list of books from Freebase
 let bookList = 
-    fb.``Arts and Entertainment``.Books.Books.Take(5)
+    fb.``Arts and Entertainment``.Books.Books
 
-// just a quick test
-//let printBookInfo = 
-//    for book in bookList do
-//    printfn "%s - %s" book.Name (book.Author.FirstOrDefault().Name)
-//    book |> ignore
-
-// this function will take a single book and add to our db -> changes will not be submitted until called in the console app
-// probably going to need to use a stored proc and merge though for the relational tables...
-let addToDB (book : fbprov.ServiceTypes.Book.Book.BookData) = 
-    new dbSchema.ServiceTypes.Books1(Title = book.Name)
-
-let addBooks =
-   bookList |> Seq.map addToDB
-
-// tell db to add on submit
-bookDB.Books1.InsertAllOnSubmit(addBooks)
+// batch insert
+let rec batchGet n offset ender = 
+    let insertList = 
+        bookList
+        |> Seq.skip(offset)
+        |> Seq.truncate(n)
+        |> Seq.map(fun book -> bookTable(title = book.Name))
+    bulker.Execute(insertList) |> ignore
+    match offset with
+    | i when i + n < ender -> batchGet n (offset + n) ender
+    | _ -> ignore
 
 
+
+// run the job!
 [<EntryPoint>]
 let main argv = 
-    //printfn "%A" argv
     try
-        bookDB.DataContext.SubmitChanges()
+        let runBatches = batchGet 10 0 20
+        runBatches |> ignore
     with
         | exn -> System.Console.WriteLine(exn.ToString)
     
     System.Console.WriteLine("Success!")
     System.Console.ReadKey() |> ignore
-    0 // return an integer exit code
+    0
 
+
+    //---------------------------------------------------------------------
+    // type dbSchema = SqlDataConnection<"Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;", StoredProcedures = true>
+    // let bookDB = dbSchema.GetDataContext()
+
+    //let addToDB (book : fbprov.ServiceTypes.Book.Book.BookData) =
+    //    System.Console.WriteLine book.Name //for debugging
+    //    new dbSchema.ServiceTypes.Books1(Title = book.Name)
+    //
+    //    let rec batchGet n offset ender = 
+    //      let insertList = 
+    //          bookList
+    //            |> Seq.skip(offset)
+    //            |> Seq.truncate(n)
+    //            |> Seq.map addToDB
+    //            |> bookDB.Books1.InsertAllOnSubmit
+    //          match offset with
+    //          | i when i + n < ender -> batchGet n (offset + n) ender
+    //          | _ -> ignore
+
+    // let x = batchGet 10 0 20
+    // bookDB.DataContext.SubmitChanges()
