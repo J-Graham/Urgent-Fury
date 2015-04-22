@@ -16,10 +16,11 @@
       * I left the IP blank for now, seemed easier, esp. since this won't be a public part of the app
     
     
-  * Still a lot of work do be done, but a good start.
+  * Updated with batching and bulk insert.
   
 ## TODO:
-  1. Batching
-  1. All data -  having an issue with Genre so far
-  1. Proper relational data
-  1. Resilient error handling
+  - [x] ~~Batching~~
+  - [x] ~~Bulk Insert POC~~
+  - [ ] All data -  having an issue with Genre so far
+  - [ ] Proper relational data
+  - [ ] Resilient error handling
