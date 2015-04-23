@@ -1,6 +1,6 @@
 ## Freebase Import README
 
-  * Imports book information from Freebase. Job now functional, though requires error handling.
+  * Imports book information from Freebase. Job now functional, though requires error handling. I've processed about 1000 records at once, but was hit with a WebExcepion towards the end of the job. Still need to investigate. Could improve the null hanlding. Also would love to try to do some asychronous processing, as the biggest hit time-wise is waiting for the API.
   
   * Note: You will need an API Key to get this to work, and in fact to even get the Freebase Type Provider to display without errors.
     * I would have used mine, but it's tied to my google account so I removed it. (although I'm sure I'll forget and push it at somepoint)
@@ -21,5 +21,5 @@
     
   
 ## TODO:
-  - [ ] Resilient error handling!! Still currently hitting some Null Reference Exceptions.
-  - [ ] Maybe explore some async options for fun?
+  - [ ] Resilient error handling!!
+  - [ ] Maybe explore some async options
