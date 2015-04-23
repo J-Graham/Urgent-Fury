@@ -1,6 +1,6 @@
 ## Freebase Import README
 
-  * Imports book information from Freebase. Job now fully functional.
+  * Imports book information from Freebase. Job now functional, though requires error handling.
   
   * Note: You will need an API Key to get this to work, and in fact to even get the Freebase Type Provider to display without errors.
     * I would have used mine, but it's tied to my google account so I removed it. (although I'm sure I'll forget and push it at somepoint)
