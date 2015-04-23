@@ -17,7 +17,7 @@ let fb = fbprov.GetDataContext()
 
 // SQL Programmaility Provider
 type sqlprog = SqlProgrammabilityProvider<"Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;">
-type bookTable = sqlprog.dbo.``User-Defined Table Types``.tt_BookNames
+type bookTable = sqlprog.dbo.``User-Defined Table Types``.tt_BookAuthorImport
 type bulkInsert = sqlprog.dbo.Books_BulkInsert
 
 let bulker = new bulkInsert("Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;User ID= sa_Books;password=booky88;Integrated Security=SSPI;")
@@ -29,13 +29,27 @@ let bulker = new bulkInsert("Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;
 let bookList = 
     fb.``Arts and Entertainment``.Books.Books
 
+let addBookFields (book : fbprov.ServiceTypes.Book.Book.BookData) = 
+    let genres = 
+        book.Genre |> Seq.map(fun g -> g.Name + "|") |> System.String.Concat
+    let author =
+        book.Author.FirstOrDefault()
+    // -- Comment out here when not debugging
+    let line = sprintf "%s %s %s" book.Name author.Name genres
+    System.Console.WriteLine line
+    // --
+    bookTable(Title = book.Name, Author = author.Name, Genres = genres)
+    
+
 // batch insert
 let rec batchGet n offset ender = 
+
     let insertList = 
         bookList
         |> Seq.skip(offset)
         |> Seq.truncate(n)
-        |> Seq.map(fun book -> bookTable(title = book.Name))
+        //|> Seq.map(fun book -> bookTable(title = book.Name))
+        |> Seq.map addBookFields
     bulker.Execute(insertList) |> ignore
     match offset with
     | i when i + n < ender -> batchGet n (offset + n) ender
