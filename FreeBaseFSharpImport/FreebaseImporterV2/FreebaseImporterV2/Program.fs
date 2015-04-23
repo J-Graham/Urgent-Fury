@@ -29,16 +29,18 @@ let bulker = new bulkInsert("Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;
 let bookList = 
     fb.``Arts and Entertainment``.Books.Books
 
+
+
 let addBookFields (book : fbprov.ServiceTypes.Book.Book.BookData) = 
-    let genres = 
-        book.Genre |> Seq.map(fun g -> g.Name + "|") |> System.String.Concat
+    let genres =  
+        book.Genre |> Seq.map(fun g -> if g <> null then g.Name + "|" else "") |> System.String.Concat
     let author =
-        book.Author.FirstOrDefault()
+        if book.Author.FirstOrDefault() <> null then book.Author.FirstOrDefault().Name else ""
     // -- Comment out here when not debugging
-    let line = sprintf "%s %s %s" book.Name author.Name genres
+    let line = sprintf "%s %s %s" book.Name author genres
     System.Console.WriteLine line
     // --
-    bookTable(Title = book.Name, Author = author.Name, Genres = genres)
+    bookTable(Title = book.Name, Author = author, Genres = genres)
     
 
 // batch insert
@@ -61,12 +63,13 @@ let rec batchGet n offset ender =
 [<EntryPoint>]
 let main argv = 
     try
-        let runBatches = batchGet 10 0 20
+        let runBatches = batchGet 10 0 100
         runBatches |> ignore
+        System.Console.WriteLine("Success!")
     with
-        | exn -> System.Console.WriteLine(exn.ToString)
+        | exn -> System.Console.WriteLine(exn.InnerException.ToString)
     
-    System.Console.WriteLine("Success!")
+    
     System.Console.ReadKey() |> ignore
     0
 
@@ -91,4 +94,16 @@ let main argv =
     //          | _ -> ignore
 
     // let x = batchGet 10 0 20
-    // bookDB.DataContext.SubmitChanges()
+//    // bookDB.DataContext.SubmitChanges()
+//
+//
+//    let genres =  
+//        match book.Genre with
+//        | null -> ""
+//        | _ -> Seq.map(fun (g : fbprov.ServiceTypes.Media_common.Media_common.Literary_genreData) -> g.Name + "|") |> System.String.Concat
+//    let author =
+//        book.Author.FirstOrDefault()
+//    let authorName =
+//        match author with
+//        | null -> ""
+//        | _ -> author.Name
