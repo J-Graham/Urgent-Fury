@@ -1,4 +1,7 @@
 ## Freebase Import README
+
+  * Imports book information from Freebase. Job now fully functional.
+  
   * Note: You will need an API Key to get this to work, and in fact to even get the Freebase Type Provider to display without errors.
     * I would have used mine, but it's tied to my google account so I removed it. (although I'm sure I'll forget and push it at somepoint)
     * insert the key here: 
@@ -16,11 +19,7 @@
       * I left the IP blank for now, seemed easier, esp. since this won't be a public part of the app
     
     
-  * Updated with batching and bulk insert.
   
 ## TODO:
-  - [x] ~~Batching~~
-  - [x] ~~Bulk Insert POC~~
-  - [ ] All data -  having an issue with Genre so far
-  - [ ] Proper relational data
-  - [ ] Resilient error handling
+  - [ ] Resilient error handling?
+  - [ ] Maybe explore some async options for fun?
