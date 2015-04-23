@@ -21,5 +21,5 @@
     
   
 ## TODO:
-  - [ ] Resilient error handling?
+  - [ ] Resilient error handling!! Still currently hitting some Null Reference Exceptions.
   - [ ] Maybe explore some async options for fun?
