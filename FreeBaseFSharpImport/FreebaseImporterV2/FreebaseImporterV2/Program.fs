@@ -29,13 +29,18 @@ let bulker = new bulkInsert("Data Source=SAGER\SQLEXPRESS;Initial Catalog=Books;
 let bookList = 
     fb.``Arts and Entertainment``.Books.Books
 
-
+let matchgenre (g : fbprov.ServiceTypes.Media_common.Media_common.Literary_genreData) = 
+    match g with
+    | null -> ""
+    | somegenre -> somegenre.Name
 
 let addBookFields (book : fbprov.ServiceTypes.Book.Book.BookData) = 
     let genres =  
-        book.Genre |> Seq.map(fun g -> if g <> null then g.Name + "|" else "") |> System.String.Concat
+        book.Genre |> Seq.map matchgenre |> System.String.Concat
     let author =
-        if book.Author.FirstOrDefault() <> null then book.Author.FirstOrDefault().Name else ""
+        match book.Author.FirstOrDefault() with
+        | null -> ""
+        | abook -> abook.Name
     // -- Comment out here when not debugging
     let line = sprintf "%s %s %s" book.Name author genres
     System.Console.WriteLine line
@@ -45,12 +50,10 @@ let addBookFields (book : fbprov.ServiceTypes.Book.Book.BookData) =
 
 // batch insert
 let rec batchGet n offset ender = 
-
     let insertList = 
         bookList
         |> Seq.skip(offset)
         |> Seq.truncate(n)
-        //|> Seq.map(fun book -> bookTable(title = book.Name))
         |> Seq.map addBookFields
     bulker.Execute(insertList) |> ignore
     match offset with
@@ -58,12 +61,11 @@ let rec batchGet n offset ender =
     | _ -> ignore
 
 
-
 // run the job!
 [<EntryPoint>]
 let main argv = 
     try
-        let runBatches = batchGet 10 0 100
+        let runBatches = batchGet 10 1010 1040
         runBatches |> ignore
         System.Console.WriteLine("Success!")
     with
